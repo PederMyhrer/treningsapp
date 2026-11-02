@@ -735,7 +735,7 @@ document.addEventListener('submit', async e => {
   e.preventDefault();
   const id = e.target.id;
   if (id === 'lock-form') {
-    const pw = $('#lock-pw').value, msg = $('#lock-msg');
+    const pw = $('#lock-pw').value.trim(), msg = $('#lock-msg');
     msg.textContent = '';
     $('#lock-go').disabled = true;
     try {
