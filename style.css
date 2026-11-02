@@ -19,7 +19,7 @@
   :root {
     --wall: #151B23; --surface: #1E2631; --ink: #EDF0F4; --muted: #A3ADBB; --line: #333E4C; --bolt: #2E3845;
     --mat: #A9C4F0; --mat-ink: #12203A; --mat-soft: #27344A;
-    --t-buldring: #E0559C; --t-styrke: #5E95EA; --t-cardio: #25AE89; --t-annet: #CF962A;
+    --t-buldring: #E0559C; --t-styrke: #5E95EA; --t-cardio: #1C9E7C; --t-annet: #BE8A24;
     --bad: #F2A29C;
     color-scheme: dark;
   }
