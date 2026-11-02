@@ -4,13 +4,16 @@
 @font-face { font-family: "Barlow Condensed"; src: url("fonts/barlow-condensed-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 @font-face { font-family: "Barlow Condensed"; src: url("fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-display: swap; }
 
+/* Stor Ø i Barlow Condensed har for bred sidekant, så den ene bokstaven hentes fra Barlow */
+@font-face { font-family: "Barlow O"; src: url("fonts/barlow-latin-600-normal.woff2") format("woff2"); font-weight: 500 600; font-display: swap; unicode-range: U+D8; }
+
 /* Kalk og krasjmatte: lys, kjølig veggflate og dyp matteblå. Fargene på feste og grafer er typene. */
 :root {
   --wall: #E8EAED; --surface: #F8F9FA; --ink: #1B2430; --muted: #566070; --line: #CFD4DB; --bolt: #C3C9D1;
   --mat: #22406E; --mat-ink: #FFFFFF; --mat-soft: #DCE4F0;
   --t-buldring: #C2257C; --t-styrke: #2463C9; --t-cardio: #0B8A6A; --t-annet: #B57200;
   --bad: #B3261E;
-  --cond: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --cond: "Barlow O", "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
   --body: "Barlow", system-ui, sans-serif;
   --safe-b: env(safe-area-inset-bottom, 0px);
   color-scheme: light;
@@ -30,7 +33,6 @@
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--wall); color: var(--ink); font: 400 16px/1.45 var(--body); overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
 h1, h2, h3, p { margin: 0; }
-h1, h2, h3 { font-kerning: none; }
 h1 { font: 600 34px/1.05 var(--cond); }
 h2 { font: 600 24px/1.1 var(--cond); }
 h3 { font: 600 19px/1.15 var(--cond); }
