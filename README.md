@@ -6,9 +6,9 @@ Treningslogg med kalender, styrkeutvikling og buldring. Én statisk side på Git
 
 ## Bruk
 
-- **Kalender:** festene på veggen viser hvilke dager du har trent. Trykk på en dag for å se uken, og på en økt for å se eller føre den.
-- **Økt:** velg buldring, styrke, cardio eller annet. Alt lagres mens du skriver.
-- **Oversikt:** økter per uke, styrke per øvelse, topper, fingrene og faste tester.
+- **Logg:** ukestripen viser hvilke dager du har trent. Trykk på en dag for å føre rett på den, og trykk eller dra ned for å se hele måneden. Dra til siden for å bytte uke.
+- **Økt:** velg buldring, styrke, cardio eller annet med ett trykk. Forrige vekt er fylt ut, så neste sett er ett trykk. Trykk på et sett for å endre det.
+- **Utvikling:** økter per uke, styrke per øvelse, topper, fingrene og faste tester.
 - **Mer:** kroppsvekt, buldrefarger, synk, nedlasting og passord.
 
 Legg siden på hjemskjermen, så oppfører den seg som en app.
@@ -48,4 +48,4 @@ node test/e2e.cjs
 
 ## Lisens
 
-Skriftene i `fonts/` (Barlow) er lisensiert under SIL Open Font License 1.1.
+Skriften i `fonts/` (Schibsted Grotesk) er lisensiert under SIL Open Font License 1.1.

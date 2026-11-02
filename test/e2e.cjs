@@ -73,30 +73,45 @@ async function fakeGitHub(route) {
   await p.fill('#lock-pw', 'feil'); await p.click('#lock-go');
   await p.waitForFunction(() => document.querySelector('#lock-msg').textContent.includes('Feil passord'));
   await p.fill('#lock-pw', PW); await p.click('#lock-go');
-  await p.waitForSelector('.wall');
-  await p.waitForSelector('.day.today .hold');
+  await p.waitForSelector('.days');
+  await p.waitForSelector('.dc.is-today .marks .ic');
   await noOverflow('kalender');
   await p.screenshot({ path: path.join(OUT, '1-kalender.png'), fullPage: true });
 
-  // Nedtrekk: dag til uke til økt
-  await p.tap('.day.today');
-  await p.waitForSelector('.agenda-day .sess');
-  assert.equal(await p.locator('.day').count(), 7);
-  await p.screenshot({ path: path.join(OUT, '2-uke.png'), fullPage: true });
-  await p.tap('.agenda-day.sel .sess');
-  await p.waitForSelector('.ex');
-  assert.equal(await p.locator('.set').count(), 4);
-  await noOverflow('økt');
+  // Ukestripen viser én uke, og måneden åpnes og lukkes
+  assert.equal(await p.locator('.dc').count(), 7);
+  await p.tap('.grab');
+  assert.ok(await p.locator('.dc').count() >= 28);
+  await p.screenshot({ path: path.join(OUT, '2-maned.png'), fullPage: true });
+  await p.tap('.dc.is-sel');
+  assert.equal(await p.locator('.dc').count(), 7);
 
-  // Fører et sett med komma i tallet
-  await p.tap('[data-act=add-set]');
-  await p.locator('.set').nth(4).locator('input').nth(0).fill('3');
-  await p.locator('.set').nth(4).locator('input').nth(1).fill('22,5');
-  await p.tap('[data-act=scale][data-field=rpe][data-v="8"]');
+  // Fører sett rett på dagen: ett trykk åpner, verdiene er fylt ut, komma virker
+  await p.waitForSelector('.sess .set');
+  assert.equal(await p.locator('.set:not(.ghost)').count(), 4);
+  await p.tap('.set.ghost');
+  await p.waitForSelector('.comp');
+  assert.equal(await p.locator('[data-d=kg]').inputValue(), '20');
+  await p.locator('[data-d=reps]').fill('3');
+  await p.locator('[data-d=kg]').fill('22,5');
+  await p.tap('[data-act=save-set]');
+  assert.equal(await p.locator('.set:not(.ghost)').count(), 5);
+  await p.tap('[data-act=save-set]');   // Samme sett igjen er ett trykk
+  assert.equal(await p.locator('.set:not(.ghost)').count(), 6);
+  assert.equal(await p.locator('.set:not(.ghost)').nth(5).textContent(), '3×22,5');
+  await p.tap('[data-act=bump][data-k=kg][data-n="1"]');
+  assert.equal(await p.locator('[data-d=kg]').inputValue(), '25');
+  await p.locator('.set:not(.ghost)').nth(5).tap();
+  await p.tap('[data-act=del-set]');
+  assert.equal(await p.locator('.set:not(.ghost)').count(), 5);
   await p.screenshot({ path: path.join(OUT, '3-okt.png'), fullPage: true });
-  await p.tap('[data-act=close]');
-  await p.waitForFunction(() => document.querySelector('#sheet').hidden);
-  await p.waitForSelector('.sess >> text=opptil 22,5 kg');
+  await noOverflow('føring');
+  await p.tap('[data-act=ex-close]');
+  await p.tap('[data-act=finish]');
+  await p.tap('[data-act=num][data-field=rpe][data-v="8"]');
+  await p.waitForSelector('.fin-t em >> text=RPE 8');
+  await p.screenshot({ path: path.join(OUT, '3b-etter.png'), fullPage: true });
+  await p.tap('[data-act=finish]');
 
   // Oversikt
   await p.tap('[data-tab=oversikt]');
@@ -106,14 +121,13 @@ async function fakeGitHub(route) {
   await p.screenshot({ path: path.join(OUT, '4-oversikt.png'), fullPage: true });
   await p.locator('#ch-ex svg').tap();
   await p.waitForFunction(() => !document.querySelector('#tip').hidden);
-  // Kontrollregning: beste sett i dag er (80 + 22,5) * (1 + 3/30) = 112,75 mot (80+20)*(1+4/30) = 113,33
-  const table = await p.locator('#tb-ex td').first().textContent();
-  assert.ok(table, 'tabell');
+  // Kontrollregning: (80 + 20) * (1 + 4/30) = 113,33 slår (80 + 22,5) * (1 + 3/30) = 112,75
   assert.equal(await p.locator('#tb-ex tbody tr').first().locator('td').nth(1).textContent(), '113,3');
 
-  // Mer: nytt token, og bakgrunnssynk med ekte PUT-format
+  // Mer: token og synk
   await p.tap('[data-tab=mer]');
   await noOverflow('mer');
+  await p.locator('.opt[data-key=sync] summary').tap();
   await p.screenshot({ path: path.join(OUT, '5-mer.png'), fullPage: true });
   await p.fill('#token', 'github_pat_fake'); await p.tap('#f-token button');
   await p.waitForFunction(() => document.querySelector('#sync')?.textContent === 'Synket');
@@ -122,45 +136,56 @@ async function fakeGitHub(route) {
   assert.ok(seen.sessions.some(s => (s.exercises || []).some(e => e.sets.some(x => x.kg === 22.5))), 'skriptet leser data kryptert av nettleseren');
 
   // Konflikt: skriptet (Claude) legger inn en økt mens appen fører en annen
-  await p.tap('[data-tab=kalender]');
-  await p.tap('.fab');
+  await p.tap('[data-tab=logg]');
+  await p.tap('[data-act=pick]');
   await p.tap('[data-act=create][data-v=buldring]');
-  await p.waitForSelector('.prob-add');
+  await p.waitForSelector('.grades');
   cli('okt', '--type', 'cardio', '--plan', 'Fra Claude', '--dato', T);
   sha++;   // Filen er endret utenfor appen
-  await p.tap('.prob-add .chip >> text=Gul');
-  await p.tap('[data-act=tries][data-n="1"]');
-  await p.tap('[data-act=top]');
+  await p.tap('.grades button[aria-label=Gul]');
+  await p.tap('[data-act=bump][data-k=tries][data-n="1"]');
+  await p.tap('[data-act=save-prob][data-v="1"]');
+  await p.tap('[data-act=save-prob][data-v="0"]');
   await p.screenshot({ path: path.join(OUT, '6-buldring.png'), fullPage: true });
-  await p.tap('[data-act=close]');
   await p.waitForFunction(() => document.querySelector('#sync')?.textContent === 'Synket');
-  await p.waitForTimeout(1500);
+  await p.waitForTimeout(2200);
   await p.waitForFunction(() => document.querySelector('#sync')?.textContent === 'Synket');
   assert.ok(conflicts >= 1, 'konflikten skal ha skjedd');
   const after = JSON.parse(cli('json'));
   assert.ok(after.sessions.some(s => s.plan === 'Fra Claude'), 'økten fra skriptet overlever');
   assert.ok(after.sessions.some(s => (s.problems || []).some(x => x.grade === 'Gul' && x.tries === 2 && x.top && s.date === T)), 'økten fra appen overlever');
+  await p.waitForSelector('.sess-t >> text=Fra Claude');
+  await noOverflow('buldring');
 
-  // Slett og angre
-  await p.tap('.sess >> text=Fra Claude');
+  // Rediger detaljer, slett og angre
+  const cardio = p.locator('.sess', { hasText: 'Fra Claude' });
+  await cardio.locator('[data-act=details]').tap();
+  await p.waitForSelector('.pop-box');
+  await p.screenshot({ path: path.join(OUT, '6b-detaljer.png') });
   await p.tap('[data-act=del]');
   await p.tap('#toast-undo');
-  await p.waitForSelector('.sess >> text=Fra Claude');
+  await p.waitForSelector('.sess-t >> text=Fra Claude');
 
   // Husket passord: ny lasting krever ikke innlogging
   await p.reload();
-  await p.waitForSelector('.wall');
+  await p.waitForSelector('.days');
 
-  // Lukker uten innhold: tom økt forsvinner
-  await p.tap('.fab'); await p.tap('[data-act=create][data-v=annet]'); await p.tap('[data-act=close]');
-  assert.ok(await p.evaluate(() => !document.querySelector('.sess b')?.textContent.startsWith('Annet')));
+  // En tom økt forsvinner når du går videre, og en tom dag viser typevalg direkte
+  await p.tap('[data-act=pick]'); await p.tap('[data-act=create][data-v=annet]');
+  const n = await p.locator('.sess').count();
+  await p.tap('[data-tab=mer]'); await p.tap('[data-tab=logg]');
+  assert.equal(await p.locator('.sess').count(), n - 1);
+  await p.tap('[data-act=shift][data-n="1"]');
+  await p.waitForSelector('.pick-row');
+  await p.screenshot({ path: path.join(OUT, '6c-tom.png') });
+  await p.tap('[data-act=today]');
 
   // Mørk modus
   const dark = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, colorScheme: 'dark', timezoneId: 'Europe/Oslo' });
   await dark.route('https://api.github.com/**', fakeGitHub);
   const q = await dark.newPage();
   await q.goto(url); await q.fill('#lock-pw', PW); await q.click('#lock-go');
-  await q.waitForSelector('.wall');
+  await q.waitForSelector('.days');
   await q.screenshot({ path: path.join(OUT, '7-kalender-mork.png'), fullPage: true });
   await q.tap?.('[data-tab=oversikt]').catch(() => {});
   await q.click('[data-tab=oversikt]');

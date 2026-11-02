@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Trening</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#E8EAED" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#151B23" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F6F7F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111816" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Trening">
@@ -19,13 +19,13 @@
 <body>
 <div id="lock" class="lock">
   <form id="lock-form" class="lock-box">
-    <svg viewBox="0 0 24 24" class="lock-hold" aria-hidden="true"><path d="M6 5c3-3 9-3 12 0s4 8 1 12-8 5-12 3-6-7-5-10 2-3 4-5Z"/><circle cx="12" cy="11.5" r="2"/></svg>
+    <svg viewBox="0 0 24 24" class="lock-mark" aria-hidden="true"><path d="M3.4 19.5 6.8 9l6-5 7 5.6 1 9.9Z"/><circle class="dot" cx="10.6" cy="10.2" r="1.2"/><circle class="dot" cx="14.6" cy="13.2" r="1.2"/><circle class="dot" cx="9.4" cy="15.4" r="1.2"/></svg>
     <h1>Trening</h1>
     <label>Passord
       <input id="lock-pw" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" required>
     </label>
     <label class="check"><input id="lock-remember" type="checkbox" checked> Husk på denne enheten</label>
-    <button class="btn primary" id="lock-go">Åpne</button>
+    <button class="btn" id="lock-go">Åpne</button>
     <p id="lock-msg" class="msg" role="alert"></p>
   </form>
 </div>
@@ -33,9 +33,9 @@
 <div id="app" class="app" hidden>
   <main id="view"></main>
   <nav class="tabs" aria-label="Hovedmeny">
-    <button data-tab="kalender"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Kalender</button>
-    <button data-tab="oversikt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19 9.5 12l4 3.5L20 6"/></svg>Oversikt</button>
-    <button data-tab="mer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Mer</button>
+    <button data-tab="logg"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3.5"/><path d="M4 10h16M8.5 3v3.5M15.5 3v3.5"/><path d="m9 15 2 2 4-4"/></svg>Logg</button>
+    <button data-tab="oversikt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19c2.5-.5 3.5-3.5 5.5-5s3.5-.5 5-2.5 2-4.5 5.5-6.5"/><circle cx="9.5" cy="14" r="1.5"/><circle cx="14.5" cy="11.5" r="1.5"/><circle cx="20" cy="5" r="1.5"/></svg>Utvikling</button>
+    <button data-tab="mer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h9M18 7.5h2M4 16.5h2M11 16.5h9"/><circle cx="15.5" cy="7.5" r="2.2"/><circle cx="8.5" cy="16.5" r="2.2"/></svg>Mer</button>
   </nav>
 </div>
 
