@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trening</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#E8EAED" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151B23" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trening">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="lock" class="lock">
+  <form id="lock-form" class="lock-box">
+    <svg viewBox="0 0 24 24" class="lock-hold" aria-hidden="true"><path d="M6 5c3-3 9-3 12 0s4 8 1 12-8 5-12 3-6-7-5-10 2-3 4-5Z"/><circle cx="12" cy="11.5" r="2"/></svg>
+    <h1>Trening</h1>
+    <label>Passord
+      <input id="lock-pw" type="password" autocomplete="current-password" required>
+    </label>
+    <label class="check"><input id="lock-remember" type="checkbox" checked> Husk på denne enheten</label>
+    <button class="btn primary" id="lock-go">Åpne</button>
+    <p id="lock-msg" class="msg" role="alert"></p>
+  </form>
+</div>
+
+<div id="app" class="app" hidden>
+  <main id="view"></main>
+  <nav class="tabs" aria-label="Hovedmeny">
+    <button data-tab="kalender"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Kalender</button>
+    <button data-tab="oversikt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19 9.5 12l4 3.5L20 6"/></svg>Oversikt</button>
+    <button data-tab="mer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Mer</button>
+  </nav>
+</div>
+
+<div id="sheet" class="sheet" hidden></div>
+<div id="tip" class="tip" hidden></div>
+<div id="toast" class="toast" role="status" hidden><span id="toast-txt"></span><button id="toast-undo">Angre</button></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
